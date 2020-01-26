@@ -5,6 +5,10 @@ import "baconjs";
 import { repeatedly, Observable } from "baconjs";
 import { useState, useEffect, useMemo } from "react";
 
+function useInit<T>(initValue: () => T) {
+  return useMemo(initValue, []);
+}
+
 function useEvent<T>(streamCreator: () => Observable<T>) {
   const [value, setValue] = useState<T>();
 
@@ -19,9 +23,7 @@ function useEvent<T>(streamCreator: () => Observable<T>) {
 }
 
 export default function App() {
-  const repeater = useMemo(() => {
-    return repeatedly(1000, [1, 2, 3, 4, 5]);
-  }, []);
+  const repeater = useInit(() => repeatedly(1000, [1, 2, 3, 4, 5]));
 
   const value = useEvent(() => repeater);
 
